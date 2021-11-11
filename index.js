@@ -764,5 +764,6 @@ window.onload = function () {
             queue.shift();
         }
     }
+
     BFS(root)
 };
