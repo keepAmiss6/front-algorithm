@@ -747,6 +747,7 @@ window.onload = function () {
     /**
      * 广度优先遍历 BFS
      * 广度优先遍历的本质——队列结构
+     * BFS+队列
      */
     function BFS(root) {
         if (!root) return;
@@ -796,7 +797,8 @@ window.onload = function () {
     }
 
     let res = preorderTraveral(root);
-    console.log('先序遍历', res);
+
+    // console.log('先序遍历', res);
 
     /**
      * 中序遍历：左 右 根
@@ -822,7 +824,8 @@ window.onload = function () {
     }
 
     let respost = postorderTraveral(root);
-    console.log('后序遍历', respost);
+
+    // console.log('后序遍历', respost);
 
     /**
      * 中序遍历
@@ -854,7 +857,68 @@ window.onload = function () {
         }
         return res;
     }
-    let resinorder=inorderTraversal(root);
-    console.log('中序遍历',resinorder)
 
+    let resinorder = inorderTraversal(root);
+
+    // console.log('中序遍历',resinorder)
+
+    /**
+     * 层序遍历 给你一个二叉树，请你返回其按 层序遍历 得到的节点值。 （即逐层地，从左到右访问所有节点）。
+     * 二叉树：[3,9,20,null,null,15,7],
+     * 返回 [
+     [3],
+     [9,20],
+     [15,7]
+     ]
+     */
+    function levelOrder(root) {
+        let res = [];
+        let queue = [];
+        queue.push(root);
+        while (queue.length) {
+            let level = [];
+            let len = queue.length;
+            for (let i = 0; i < len; i++) {
+                let top = queue.shift();
+                level.push(top.val);
+                if (top.left) {
+                    queue.push(top.left)
+                }
+                if (top.right) {
+                    queue.push(top.right)
+                }
+            }
+            res.push(level)
+        }
+        return res;
+    }
+
+    let reslevorder = levelOrder(root);
+    // console.log('层序遍历', reslevorder);
+
+    /**
+     * 反转二叉树
+     4
+     /   \
+     2     7
+     / \   / \
+     1   3 6   9
+     输出
+     4
+     /   \
+     7     2
+     / \   / \
+     9   6 3   1
+     */
+    function reverseTree(root) {
+        if (!root) return;
+        let temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+        reverseTree(root.left);
+        reverseTree(root.right);
+        return root
+    }
+
+    console.log('反转二叉树',reverseTree(root))
 };
