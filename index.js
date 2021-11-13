@@ -742,7 +742,7 @@ window.onload = function () {
         DFS(root.right)
     }
 
-    DFS(root);
+    // DFS(root);
 
     /**
      * 广度优先遍历 BFS
@@ -765,5 +765,96 @@ window.onload = function () {
         }
     }
 
-    BFS(root)
+    // BFS(root);
+
+    /**
+     * 给定一个二叉树，返回它的前序（先序）遍历序列。不用递归（子调用），通过迭代算法完成
+     * 思路：利用栈:
+     * 1、先把根结点入栈，然后弹出，记录弹出值
+     * 2、访问右子树，有值入栈；访问左子树，有值入展
+     * 3、在执行第一步
+     */
+    function preorderTraveral(root) {
+        if (!root) {
+            return
+        }
+        let res = [];
+        let stack = [];
+        stack.push(root);
+        while (stack.length > 0) {
+            let node = stack.pop();
+            res.push(node.val);
+            // 因为出栈的时候需要让左子树先出，所以入栈的时候要先让右子树先入
+            if (node.right) {
+                stack.push(node.right)
+            }
+            if (node.left) {
+                stack.push(node.left)
+            }
+        }
+        return res;
+    }
+
+    let res = preorderTraveral(root);
+    console.log('先序遍历', res);
+
+    /**
+     * 中序遍历：左 右 根
+     * 思路：因为根跑到了最后，所以我们把入栈的方式从push该为unshift
+     * 根先入栈，然后弹出，第二出的是右，那先把左放进去，
+     */
+    function postorderTraveral(root) {
+        if (!root) return;
+        let res = [];
+        let stack = [];
+        stack.push(root);
+        while (stack.length) {
+            let top = stack.pop();
+            res.unshift(top.val);
+            if (top.left) {
+                stack.push(top.left)
+            }
+            if (top.right) {
+                stack.push(top.right)
+            }
+        }
+        return res;
+    }
+
+    let respost = postorderTraveral(root);
+    console.log('后序遍历', respost);
+
+    /**
+     * 中序遍历
+     * 思路：
+     * 1、两个循环：内层寻找左叶子的过程中，把途径的所有结点都记录到stack中
+     * 2、记录完，才走的外层while的剩余逻辑中，这部分逻辑的作用是从最左的叶子结点开始
+     * 一层层回溯遍历左孩子的父结点和右侧兄弟
+     * 3、最外层的cur的存在性：
+     * 1）初始态，cur指向root，只有root不为空，就看书左叶子结点的寻找之旅，cur始终指向当前遍历到的左孩子
+     * 2）第一波内层while循环结束后，cur开始承担中序遍历的遍历游标职责
+     * cur始终指向当前栈顶元素
+     * ......
+     */
+    function inorderTraversal(root) {
+        let res = [];
+        let stack = [];
+        // 游标
+        let cur = root;
+        while (cur || stack.length) {
+            //记录左叶子结点
+            while (cur) {
+                stack.push(cur);
+                cur = cur.left;//搜索当前结点的左孩子
+            }
+            //取出栈顶元素
+            cur = stack.pop();
+            res.push((cur.val));
+            cur = cur.right;
+        }
+        return res;
+    }
+    let resinorder=inorderTraversal(root);
+    console.log('中序遍历',resinorder)
+
 };
