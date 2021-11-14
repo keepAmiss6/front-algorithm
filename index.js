@@ -894,6 +894,7 @@ window.onload = function () {
     }
 
     let reslevorder = levelOrder(root);
+
     // console.log('层序遍历', reslevorder);
 
     /**
@@ -920,5 +921,170 @@ window.onload = function () {
         return root
     }
 
-    console.log('反转二叉树',reverseTree(root))
+    // console.log('反转二叉树',reverseTree(root));
+
+    /**
+     * 二叉搜索树，有很多别名，比如排序二叉树、二叉查找树等等。
+     * 查找数据域为某一特定值的结点
+     */
+    function search(root, n) {
+        if (!root) return;
+        if (root.val === n) {
+            console.log('二叉搜索树里找' + n, root)
+        } else if (root.val > n) {
+            search(root.left, n)
+        } else {
+            search(root.right, n)
+        }
+    }
+
+    const tree = {
+        val: 8,
+        left: {
+            val: 6,
+            left: {
+                val: 2
+            },
+            right: {
+                val: 4
+            }
+        },
+        right: {
+            val: 10,
+            right: {
+                val: 13
+            }
+        }
+    };
+    search(tree, 13);
+
+    /**
+     * 冒泡排序
+     * 思路：
+     * 冒泡排序的过程，就是从第一个元素开始，重复比较相邻的两个项，若第一项比第二项更大，则交换两者的位置；反之不动。
+     * 每一轮操作，都会将这一轮中最大的元素放置到数组的末尾。假如数组的长度是 n，那么当我们重复完 n 轮的时候，整个数组就有序了。
+     * [5, 3, 2, 4, 1]
+     */
+    function betterBubbleSort(arr) {
+        let len = arr.length;
+        // 使用flag减少比较次数，当一轮下来，没有发生过交换证明是有序的，则不许要再比了，这时的空间复杂度为O(n)
+        // 最复杂的空间复杂度是O(n^2)
+        let flag = false;
+        // 最外层记录次数
+        for (let i = 0; i < len; i++) {
+            for (let j = 0; j < len - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                    flag = true;
+                }
+            }
+            if (!flag) return arr;
+        }
+
+        return arr;
+    }
+
+    // let resbubblesort = betterBubbleSort([5, 3, 2, 4, 1]);
+    // console.log('冒泡排序结果为', resbubblesort)
+    /**
+     * 选择排序
+     * 选择排序的关键字是“最小值”：循环遍历数组，每次都找出当前范围内的最小值，把它放在当前范围的头部；然后缩小排序范围，继续重复以上操作，直至数组完全有序为止。
+     * 思路：
+     * 1、第一层循环用来交换每次遍历出最小值后进行位置的交换
+     * 2、第二层循环用来找最小元素
+     * 3、找最小元素需要两个关键点，一是当前最小元素是什么，二是最小元素值的位置是哪里，找到位置后，外成循环就可以快速定位到最小元素了
+     * 3、第二层的循环起点是外层循环的值，前面已经排好的不要遍历了
+     * 4、交换前记得再检查下是否有了新的最小值，否则会无意义交换造成错乱
+     */
+    function selectSort(arr) {
+        let len = arr.length;
+        // 外循环控制和最小值的交换
+        for (let i = 0; i < len; i++) {
+            let min = arr[i];
+            let minpos = i;
+            //内循环负责找到最小值
+            for (let j = i; j < len; j++) {
+                if (arr[j] < min) {
+                    min = arr[j];
+                    minpos = j
+                }
+            }
+
+            // 确保一下最小值确实发生变化了，否则会进行无意义交换
+            if (min < arr[i]) {
+                [arr[i], arr[minpos]] = [arr[minpos], arr[i]]
+                // let temp = arr[minpos];
+                // arr[minpos] = arr[i];
+                // arr[i] = temp;
+            }
+        }
+        console.log('选择排序结果', arr)
+    }
+
+    // selectSort([5, 3, 2, 55, 6, 34, 4, 1]);
+
+    /**
+     * 插入排序
+     * 插入排序的核心思想是“找到元素在它前面那个序列中的正确位置”。
+     * 具体来说，插入排序所有的操作都基于一个这样的前提：当前元素前面的序列是有序的。基于这个前提，从后往前去寻找当前元素在前面那个序列里的正确位置。
+     */
+    function insertSort(arr) {
+        let len = arr.length;
+        // 控制当前元素是否进行插入
+        for (let i = 1; i < len; i++) {
+            let j = i;
+            let temp = arr[i];
+            while (j > 0 && arr[j - 1] > temp) {
+                arr[j] = arr[j - 1];
+                j--;
+            }
+            arr[j] = temp
+        }
+        console.log('插入排序后', arr)
+    }
+
+    // insertSort([5, 3, 2, 55, 6, 34, 4, 1])
+
+    /**
+     * “分治”思想（待完善）
+     * 归并排序
+     */
+    // 分
+    function mergeSort(arr) {
+        let len = arr.length;
+        if (len === 1) return arr;
+        const mid = Math.floor(len / 2);
+        const leftArr = mergeSort(arr.splice(0, mid));
+        const rightArr = mergeSort(arr.splice(mid, len));
+        arr = mergeArr(leftArr, rightArr);
+        return arr;
+    }
+
+    function mergeArr(leftArr, rightArr) {
+
+    }
+
+    /**
+     * 快速排序
+     */
+    function quickSort(arr) {
+        if (arr.length <= 1) return arr;
+        let pivotIndex = Math.floor(arr.length / 2);
+        //选择"基准"（pivot），并将其与原数组分离
+        let pivot = arr.splice(pivotIndex, 1)[0];
+        // var pivot=arr[pivotIndex];
+        let left = [];
+        let right = [];
+        let len = arr.length;
+        for (let i = 0; i < len; i++) {
+            if (arr[i] < pivot) {
+                left.push(arr[i]);
+            } else {
+                right.push(arr[i]);
+            }
+        }
+        return quickSort(left).concat([pivot], quickSort(right))
+    }
+    console.log('快排', quickSort([3, 5, 1, 3, 22, 4, 44]))
+
 };
