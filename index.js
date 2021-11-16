@@ -751,22 +751,22 @@ window.onload = function () {
      */
     function BFS(root) {
         if (!root) return;
-        let queue = [];
+        let queue = [],res=[];
         queue.push(root);
         while (queue.length) {
-            const firstEle = queue[0];
-            console.log(firstEle.val);
+            const firstEle = queue.shift();
+            res.push(firstEle.val)
             if (firstEle.left) {
                 queue.push(firstEle.left)
             }
             if (firstEle.right) {
                 queue.push(firstEle.right)
             }
-            queue.shift();
         }
+        return res;
     }
 
-    // BFS(root);
+    console.log('bfs广度遍历结果',BFS(root));
 
     /**
      * 给定一个二叉树，返回它的前序（先序）遍历序列。不用递归（子调用），通过迭代算法完成
