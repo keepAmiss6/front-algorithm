@@ -751,7 +751,7 @@ window.onload = function () {
      */
     function BFS(root) {
         if (!root) return;
-        let queue = [],res=[];
+        let queue = [], res = [];
         queue.push(root);
         while (queue.length) {
             const firstEle = queue.shift();
@@ -766,7 +766,7 @@ window.onload = function () {
         return res;
     }
 
-    console.log('bfs广度遍历结果',BFS(root));
+    console.log('bfs广度遍历结果', BFS(root));
 
     /**
      * 给定一个二叉树，返回它的前序（先序）遍历序列。不用递归（子调用），通过迭代算法完成
@@ -1085,6 +1085,95 @@ window.onload = function () {
         }
         return quickSort(left).concat([pivot], quickSort(right))
     }
-    console.log('快排', quickSort([3, 5, 1, 3, 22, 4, 44]))
 
+    // console.log('快排', quickSort([3, 5, 1, 3, 22, 4, 44]));
+
+    /**
+     * 高效快排方式
+     * 思路
+     * 1、选取一个基数，一般我用第一个数作为基数
+     * 2、定义左右两个指针，左指向数组头，右指向数组尾
+     * 3、当左<右指针时循环判断
+     * 4、先从队尾开始向前扫描且如果a[high] > tmp,则high–,但如果a[high] < tmp,则将high的值赋值给low,即arr[low] = a[high],
+     * 同时要转换数组扫描的方式,即需要从队首开始向队尾进行扫描了
+     * 5、同理,当从队首开始向队尾进行扫描时,如果a[low] < tmp,则low++,但如果a[low] > tmp了,则就需要将low位置的值赋值给high位置,
+     * 即arr[low] = arr[high],同时将数组扫描方式换为由队尾向队首进行扫描.
+     * 6、不断重复①和②,知道low>=high时(其实是low=high),low或high的位置就是该基准数据在数组中的正确索引位置.
+     *
+     *
+     * @param arr 要排序的数组
+     * @param left 左指针
+     * @param right 右指针
+     * @returns {*}
+     */
+    function quickSort2(arr, left, right) {
+        if (left > right) return;
+        let base = arr[left];
+        let l = left;
+        let r = right;
+        while (l < r) {
+            while (l < r && arr[r] >= base) {
+                r--;
+            }
+            arr[l] = arr[r];
+            while (l < r && arr[l] <= base) {
+                l++;
+            }
+            arr[r] = arr[l];
+        }
+
+        arr[l] = base;
+
+        quickSort2(arr, left, l - 1);
+        quickSort2(arr, l + 1, right);
+
+        return arr;
+    }
+
+    let arr = [3, 5, 1, 8, 22, 4, 44];
+
+    // console.log('高效快排', quickSort2(arr, 0, arr.length - 1))
+
+    /**
+     * 顺序查找
+     */
+    function searchOrder(arr, k) {
+        let len = arr.length;
+        for (let i = 0; i < len; i++) {
+            if (arr[i] === k) {
+                return i
+            }
+        }
+        return -1;
+    }
+
+    // console.log('顺序查找',searchOrder([7,5,6,77,6],69))
+
+    /**
+     * 二分查找
+     思想：利用3个指针，left指头、right指尾
+     当left<=right时，计算mid中间位置；
+     关键字和中间数比较，如果相当，返回mid索引；
+     如果关键字大于中间数，那么在右半个区域找，丢弃左区域，left指针赋值为mid+1；
+     如果关键字小于中间数，那么在左半个区域找，丢弃右区域，right指针赋值为mid-1；
+     最后没有找到返回-1
+     */
+    function binSearch(arr, k) {
+        arr = arr.sort((a, b) => a - b);
+        let left = 0;
+        let right = arr.length - 1;
+        while (left <= right) {
+            let mid = Math.floor((left + right) / 2);
+            if (k === arr[mid]) {
+                return mid
+            } else if (k > arr[mid]) {
+                left = mid + 1;
+            } else {
+                right = mid - 1
+            }
+        }
+        return -1
+    }
+
+    console.log('二分查找', binSearch([2, 3, 4, 5,8], 5))
 };
