@@ -1,3 +1,5 @@
+import funCom from "../01_react/new-react/src/funComp/funCom";
+
 window.onload = function () {
 
     /**
@@ -924,6 +926,14 @@ window.onload = function () {
     // console.log('反转二叉树',reverseTree(root));
 
     /**
+     * 树的构造函数
+     */
+    function TreeNode(n) {
+        this.val = n;
+        this.left = this.right = null;
+    }
+
+    /**
      * 二叉搜索树，有很多别名，比如排序二叉树、二叉查找树等等。
      * 查找数据域为某一特定值的结点
      */
@@ -935,6 +945,20 @@ window.onload = function () {
             search(root.left, n)
         } else {
             search(root.right, n)
+        }
+    }
+
+    /**
+     * 非递归实现方式
+     * @param root
+     * @param n
+     * @returns {{val}|*}
+     */
+    function search2(root, n) {
+        while (root) {
+            if (root.val) return root;
+            if (root.val > n) root = root.left;
+            if (root.val < n) root = root.right;
         }
     }
 
@@ -957,6 +981,37 @@ window.onload = function () {
         }
     };
     search(tree, 13);
+
+    /**
+     * 二叉排序树的插入 7
+     */
+    function insertNode(root, n) {
+        //为空时
+        if (!root) {
+            root = new TreeNode(n);
+            return root;
+        }
+        //以存在该结点什么都不做
+        if (root.val === n) return root;
+        // 大于根结点
+        if (n > root.val) {
+            if (root.right) {
+                insertNode(root.right, n)
+            } else {
+                root.right = n;
+            }
+        }
+        if (n < root.val) {
+            if (root.left) {
+                insertNode(root.left, n)
+            } else {
+                root.left = n
+            }
+        }
+        return root;
+    }
+
+    console.log('二叉排序树插入7', insertNode(tree, 7))
 
     /**
      * 冒泡排序
@@ -1175,5 +1230,5 @@ window.onload = function () {
         return -1
     }
 
-    console.log('二分查找', binSearch([2, 3, 4, 5,8], 5))
+    console.log('二分查找', binSearch([2, 3, 4, 5, 8], 5))
 };
